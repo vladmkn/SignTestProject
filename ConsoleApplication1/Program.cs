@@ -21,14 +21,15 @@ public class StoreKey
             // Load an XML file into the XmlDocument object.
             xmlDoc.PreserveWhitespace = true;
 
-            bool подписываем = false;
+            bool подписываем = true;
 
             if (подписываем)
             {
                 // Create a new CspParameters object to specify
                 // a key container.
                 CspParameters cspParams = new CspParameters(1, "Aktiv ruToken CSP v1.0");
-                cspParams.KeyContainerName = "NNIIRT";
+                //cspParams.KeyContainerName = "NNIIRT";
+                cspParams.Flags = CspProviderFlags.UseDefaultKeyContainer;
 
                 // Create a new RSA signing key and save it in the container. 
                 RSACryptoServiceProvider rsaKey = new RSACryptoServiceProvider(cspParams);
@@ -251,6 +252,18 @@ public class StoreKey
             xmlDoc.RemoveChild(xmlDoc.FirstChild);
 
         xmlDoc.Save(@"d:\temp\test1.xml");
+
+        //        Чтобы легко проверить правильность цепи, вы можете использовать следующий код:
+        //        IsCertificateChainValid возвращает true, когда цепочка сертификатов верна. В случаях, когда он возвращает false, вы можете использовать
+        //        X509Certificate2 Certificate = new X509Certificate2("Certificate.pfx");
+        //        X509Chain CertificateChain = new X509Chain();
+        //        //If you do not provide revokation information, use the following line.
+        //        CertificateChain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
+        //        bool IsCertificateChainValid = CertificateChain.Build(Certificate);
+
+
+        //        для получения информации о том, почему статус недействителен.Возможные значения включают NotTimeValid, UntrustedRoot.
+        //        CertificateChain.ChainStatus
     }
 
     public static void VerifyXML(string path)
